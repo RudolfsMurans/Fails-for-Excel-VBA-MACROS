@@ -1,0 +1,385 @@
+
+
+Function minValue(fArr)
+Dim limit As Integer
+Dim minValHolder As Double
+
+    limit = UBound(fArr)
+    minValHolder = fArr(1)
+    For i = 1 To limit
+        If fArr(i) < minValHolder And fArr(i) > 0 Then
+            minValHolder = fArr(i)
+        End If
+    Next i
+    minValue = minValHolder
+End Function
+Function maxValue(fArr)
+Dim maxValHolder As Double
+
+    limit = UBound(fArr)
+    maxValHolder = fArr(1)
+    For i = 1 To limit
+        If fArr(i) > maxValHolder Then
+            maxValHolder = fArr(i)
+        End If
+    Next i
+    maxValue = maxValHolder
+End Function
+
+Function Quicksort(vArray As Variant, arrLbound As Long, arrUbound As Long)
+'Sorts a one-dimensional VBA array from smallest to largest
+'using a very fast quicksort algorithm variant.
+Dim pivotVal As Double
+Dim vSwap    As Double
+Dim tmpLow   As Long
+Dim tmpHi    As Long
+ 
+tmpLow = arrLbound
+tmpHi = arrUbound
+pivotVal = vArray((arrLbound + arrUbound) \ 2)
+ 
+While (tmpLow <= tmpHi) 'divide
+   While (vArray(tmpLow) < pivotVal And tmpLow < arrUbound)
+      tmpLow = tmpLow + 1
+   Wend
+  
+   While (pivotVal < vArray(tmpHi) And tmpHi > arrLbound)
+      tmpHi = tmpHi - 1
+   Wend
+ 
+   If (tmpLow <= tmpHi) Then
+      vSwap = vArray(tmpLow)
+      vArray(tmpLow) = vArray(tmpHi)
+      vArray(tmpHi) = vSwap
+      tmpLow = tmpLow + 1
+      tmpHi = tmpHi - 1
+   End If
+Wend
+
+  If (arrLbound < tmpHi) Then Quicksort vArray, arrLbound, tmpHi 'conquer
+  If (tmpLow < arrUbound) Then Quicksort vArray, tmpLow, arrUbound 'conquer
+End Function
+
+Function med(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = (j + i) / 2
+            'MsgBox a
+        med = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor((j + i) / 2, 1)
+        a2 = Application.Ceiling((j + i) / 2, 1)
+            'MsgBox a1 & a2
+        med = (arr(a1) + arr(a2)) / 2
+        Else
+            
+            med = -1
+    End If
+
+End Function
+
+Function q_one(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = (i + j) / 4
+            'msgBox a
+        q_one = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor((j + i) / 4, 1)
+        a2 = Application.Ceiling((j + i) / 4, 1)
+            'MsgBox a1 & a2
+        q_one = (arr(a1) + arr(a2)) / 2
+        Else
+            q_one = -1
+    End If
+
+End Function
+Function q_3(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = 3 * (j + i) / 4
+            'MsgBox a
+        q_3 = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor(3 * (j + i) / 4, 1)
+        a2 = Application.Ceiling(3 * (j + 1) / 4, 1)
+            'MsgBox a1 & a2
+        q_3 = (arr(a1) + arr(a2)) / 2
+        Else
+            
+            q_3 = -1
+    End If
+End Function
+
+Sub Liz_aprekini()
+Dim min, max As Double
+Dim i, n, viet, k, j, d, te, read As Integer
+viet = 24 'houer- how many data in a day
+Dim vieta(1 To 24) As Double '<== here as well chenge
+n = 10388 'how many data you have
+read = 5 ' wich row (|) data are stord
+put_it = 7 'in wich row (|) data will be stord
+d = 1
+k = 1
+
+Do While k <= n
+    j = 1
+    For i = 1 To viet
+        If Cells(k, read).Value <> "" Then
+            vieta(j) = Cells(k, read)
+                 j = j + 1
+        End If
+        k = k + 1
+    Next i
+  Cells(d, put_it) = d
+  Cells(d, put_it + 1) = minValue(vieta) 'MIN value RM
+  Cells(d, put_it + 2) = maxValue(vieta) 'Max value RM
+ '------------------------------------------------------------
+ 
+  Call Quicksort(vieta(), LBound(vieta), UBound(vieta))
+
+   ' For i = LBound(vieta) To UBound(vieta)
+    '    msg = msg & vieta(i) & vbNewLine
+    'Next i
+           ' MsgBox "the values of my dynamic array are: " & vbNewLine & msg
+               ' msg = ""
+                'Cells(d, 10) = med(vieta)
+               ' MsgBox LBound(vieta)
+                'MsgBox UBound(vieta)
+             'te = Application.Floor(5.5, 1)
+             'MsgBox med(vieta)
+'------------------------------------------------------------
+      Cells(d, put_it + 3) = med(vieta) 'Median RM
+      Cells(d, put_it + 4) = q_one(vieta) 'Q1 RM
+      Cells(d, put_it + 5) = q_3(vieta) 'Q3 RM
+      Cells(d, put_it + 6) = WorksheetFunction.StDev(vieta) 'STANDART DEVIATION
+      Cells(d, put_it + 7) = WorksheetFunction.Quartile(vieta, 1) ' Quartile 1
+      Cells(d, put_it + 8) = WorksheetFunction.Quartile(vieta, 2) ' Quartile 2/ MEDIAN
+      Cells(d, put_it + 9) = WorksheetFunction.Quartile(vieta, 3) 'Quartile 3
+      Cells(d, put_it + 11) = WorksheetFunction.Quartile(vieta, 0) ' MIN
+      Cells(d, put_it + 12) = WorksheetFunction.Quartile(vieta, 4) ' MAX
+      d = d + 1
+      Erase vieta()
+Loop
+
+End Sub
+
+
+
+
+
+
+
+
+
+Function minValue(fArr)
+Dim limit As Integer
+Dim minValHolder As Double
+
+    limit = UBound(fArr)
+    minValHolder = fArr(1)
+    For i = 1 To limit
+        If fArr(i) < minValHolder And fArr(i) > 0 Then
+            minValHolder = fArr(i)
+        End If
+    Next i
+    minValue = minValHolder
+End Function
+Function maxValue(fArr)
+Dim maxValHolder As Double
+
+    limit = UBound(fArr)
+    maxValHolder = fArr(1)
+    For i = 1 To limit
+        If fArr(i) > maxValHolder Then
+            maxValHolder = fArr(i)
+        End If
+    Next i
+    maxValue = maxValHolder
+End Function
+
+Function Quicksort(vArray As Variant, arrLbound As Long, arrUbound As Long)
+'Sorts a one-dimensional VBA array from smallest to largest
+'using a very fast quicksort algorithm variant.
+Dim pivotVal As Double
+Dim vSwap    As Double
+Dim tmpLow   As Long
+Dim tmpHi    As Long
+ 
+tmpLow = arrLbound
+tmpHi = arrUbound
+pivotVal = vArray((arrLbound + arrUbound) \ 2)
+ 
+While (tmpLow <= tmpHi) 'divide
+   While (vArray(tmpLow) < pivotVal And tmpLow < arrUbound)
+      tmpLow = tmpLow + 1
+   Wend
+  
+   While (pivotVal < vArray(tmpHi) And tmpHi > arrLbound)
+      tmpHi = tmpHi - 1
+   Wend
+ 
+   If (tmpLow <= tmpHi) Then
+      vSwap = vArray(tmpLow)
+      vArray(tmpLow) = vArray(tmpHi)
+      vArray(tmpHi) = vSwap
+      tmpLow = tmpLow + 1
+      tmpHi = tmpHi - 1
+   End If
+Wend
+
+  If (arrLbound < tmpHi) Then Quicksort vArray, arrLbound, tmpHi 'conquer
+  If (tmpLow < arrUbound) Then Quicksort vArray, tmpLow, arrUbound 'conquer
+End Function
+
+Function med(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = (j + i) / 2
+            'MsgBox a
+        med = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor((j + i) / 2, 1)
+        a2 = Application.Ceiling((j + i) / 2, 1)
+            'MsgBox a1 & a2
+        med = (arr(a1) + arr(a2)) / 2
+        Else
+            
+            med = -1
+    End If
+
+End Function
+
+Function q_one(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = (i + j) / 4
+            'msgBox a
+        q_one = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor((j + i) / 4, 1)
+        a2 = Application.Ceiling((j + i) / 4, 1)
+            'MsgBox a1 & a2
+        q_one = (arr(a1) + arr(a2)) / 2
+        Else
+            q_one = -1
+    End If
+
+End Function
+Function q_3(arr)
+Dim i, j, k, a, a1, a2 As Integer
+Dim atb As Double
+
+k = (j + i) Mod 2
+'MsgBox k
+i = LBound(arr)
+j = UBound(arr)
+
+    If k = 1 Then
+        a = 3 * (j + i) / 4
+            'MsgBox a
+        q_3 = arr(a)
+    ElseIf k = 0 Then
+    
+        a1 = Application.Floor(3 * (j + i) / 4, 1)
+        a2 = Application.Ceiling(3 * (j + 1) / 4, 1)
+            'MsgBox a1 & a2
+        q_3 = (arr(a1) + arr(a2)) / 2
+        Else
+            
+            q_3 = -1
+    End If
+End Function
+
+Sub Liz_aprekini()
+Dim min, max As Double
+Dim i, n, viet, k, j, d, te, read As Integer
+viet = 24 'houer- how many data in a day
+Dim vieta(1 To 24) As Double '<== here as well chenge
+n = 10388 'how many data you have
+read = 4 ' wich row (|) data are stord
+put_it = 6 'in wich row (|) data will be stord
+d = 1
+k = 1
+
+Do While k <= n
+    j = 1
+    For i = 1 To viet
+        If Cells(k, read).Value <> "" Then
+            vieta(j) = Cells(k, read)
+                 j = j + 1
+        End If
+        k = k + 1
+    Next i
+  Cells(d, put_it) = d
+  Cells(d, put_it + 1) = minValue(vieta) 'MIN value RM
+  Cells(d, put_it + 2) = maxValue(vieta) 'Max value RM
+ '------------------------------------------------------------
+ 
+  Call Quicksort(vieta(), LBound(vieta), UBound(vieta))
+
+   ' For i = LBound(vieta) To UBound(vieta)
+    '    msg = msg & vieta(i) & vbNewLine
+    'Next i
+           ' MsgBox "the values of my dynamic array are: " & vbNewLine & msg
+               ' msg = ""
+                'Cells(d, 10) = med(vieta)
+               ' MsgBox LBound(vieta)
+                'MsgBox UBound(vieta)
+             'te = Application.Floor(5.5, 1)
+             'MsgBox med(vieta)
+'------------------------------------------------------------
+      'Cells(d, put_it + 3) = med(vieta) 'Median RM
+    'Cells(d, put_it + 4) = q_one(vieta) 'Q1 RM
+      'Cells(d, put_it + 5) = q_3(vieta) 'Q3 RM
+      Cells(d, put_it + 3) = WorksheetFunction.StDev(vieta) 'STANDART DEVIATION
+      Cells(d, put_it + 4) = WorksheetFunction.Quartile(vieta, 1) ' Quartile 1
+      Cells(d, put_it + 5) = WorksheetFunction.Quartile(vieta, 2) ' Quartile 2/ MEDIAN
+      Cells(d, put_it + 6) = WorksheetFunction.Quartile(vieta, 3) 'Quartile 3
+      'Cells(d, put_it + 11) = WorksheetFunction.Quartile(vieta, 0) ' MIN
+      'Cells(d, put_it + 12) = WorksheetFunction.Quartile(vieta, 4) ' MAX
+      d = d + 1
+      Erase vieta()
+Loop
+
+End Sub
